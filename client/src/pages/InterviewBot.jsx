@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import axios from 'axios'
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from '../context/AuthContext'
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
@@ -10,37 +11,54 @@ const InterviewBot = () => {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (sessionStorage.getItem("fromDashboard") === "true") {
-      sessionStorage.removeItem("fromDashboard");
+    if (location.state?.fromDashboard) {
+      // Optionally clear the state if you want
+      // navigate(location.pathname, { replace: true, state: {} });
     } else {
-      window.location.replace("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
-  }, []);
+  }, [location, navigate]);
 
   const generator = async () => {
-    setLoading(true);
-    setResponse("");
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/interview/generate",
-        { role },
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      
-      setResponse(res.data.feedback || "No response from AI");
-    } catch (err) {
-      setResponse("❌ Error: " + (err.response?.data?.message || err.message));
-    } finally {
+  setLoading(true);
+  setResponse("");
+  try {
+    if (!role) {
+      setResponse("❌ Error: Role value is missing");
       setLoading(false);
+      return;
     }
-  };
+
+    const res = await axios.post(
+      "http://localhost:5000/api/interview/generate",
+      { role },
+      {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    setResponse(res.data.feedback || "No response from AI");
+  } catch (err) {
+    console.error("Request failed with error:", err);
+    setResponse(
+      "❌ Error: " +
+        (err.response?.data?.message ||
+          err.response?.data?.error ||
+          JSON.stringify(err.response?.data) ||
+          err.message)
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-300 to-pink-200 overflow-hidden">

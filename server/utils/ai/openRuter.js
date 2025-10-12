@@ -1,5 +1,5 @@
 const axios = require("axios");
-const {groqChat} = require("./groq")
+const {perplexityChat} = require("./perplexityChat")
 async function analyzeWithOpenRouter(text) {
   const prompt = `
 You are a resume reviewer. Analyze the resume text below and provide a professional yet friendly review with emojis where appropriate. Your feedback should include the following sections in plain text:
@@ -29,7 +29,7 @@ ${text}
 Please avoid using any asterisks, hashtags, or Markdown formatting in your response. Write in a conversational tone that sounds professional yet warm, like a helpful career mentor.Also make sure always start with welcome in careerMentor.Ai just like welcoming neture then after start.
 `;
 
-  return groqChat(prompt);
+  return perplexityChat(prompt);
 }
 
 async function mockInterview(role) {
@@ -49,7 +49,7 @@ Your tone should be professional, helpful, and slightly encouraging — like a s
 Please ensure all content is formatted clearly and easy to understand. Avoid Markdown symbols like **, ##, or # in the output.
 `;
 
-  return groqChat(prompt);
+  return perplexityChat(prompt);
 }
 
 async function generateRoadmap(goal) {
@@ -64,7 +64,7 @@ Please provide a detailed career roadmap including:
 5. Free resource links
 6. Tips for staying motivated
 `;
-  return groqChat(prompt);
+  return perplexityChat(prompt);
 }
 
 async function careerMentor(question) {
@@ -73,7 +73,7 @@ You are a friendly and practical career mentor for developers. Please answer cle
 
 Question: ${question}
 `;
-  return groqChat(prompt);
+  return perplexityChat(prompt);
 }
 
 module.exports = {

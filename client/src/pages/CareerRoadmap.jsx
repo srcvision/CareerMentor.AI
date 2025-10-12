@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FaUserTie, FaRobot } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -9,14 +10,17 @@ const CareerRoadmap = () => {
   const [roadmap, setRoadmap] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (sessionStorage.getItem("fromDashboard") === "true") {
-      sessionStorage.removeItem("fromDashboard");
+    if (location.state?.fromDashboard) {
+      // Optionally clear the state if you want
+      // navigate(location.pathname, { replace: true, state: {} });
     } else {
-      window.location.replace("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
-  }, []);
+  }, [location, navigate]);
 
   const getRoadmap = async () => {
     setLoading(true);

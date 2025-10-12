@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import {
@@ -21,6 +22,8 @@ const JobTracker = () => {
   const [jobType, setJobType] = useState("full-time");
   const [editId, setEditId] = useState(null);
   const [editStatus, setEditStatus] = useState("");
+  const Location = useLocation();
+  const navigate = useNavigate();
 
   const { user } = useContext(AuthContext);
 
@@ -88,13 +91,15 @@ const JobTracker = () => {
     }
   }, [user]);
 
+
   useEffect(() => {
-    if (sessionStorage.getItem("fromDashboard") === "true") {
-      sessionStorage.removeItem("fromDashboard");
+    if (Location.state?.fromDashboard) {
+      // Optionally clear the state if you want
+      // navigate(location.pathname, { replace: true, state: {} });
     } else {
-      window.location.replace("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
-  }, []);
+  }, [Location, navigate]);
 
   // Job stats for summary bar
   const stats = [
