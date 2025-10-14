@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { FaUserTie, FaRobot } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { FaRobot, FaUserTie, FaArrowLeft, FaCircleNotch } from "react-icons/fa";
 
-const CareerRoadmap = () => {
+export default function CareerRoadmap() {
   const [goal, setGoal] = useState("");
   const [roadmap, setRoadmap] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,16 +14,19 @@ const CareerRoadmap = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (location.state?.fromDashboard) {
-      // Optionally clear the state if you want
-      // navigate(location.pathname, { replace: true, state: {} });
-    } else {
+    if (!location.state?.fromDashboard) {
       navigate("/dashboard", { replace: true });
     }
   }, [location, navigate]);
 
-  const getRoadmap = async () => {
+  const handleBack = () => navigate(-1);
+
+  const generateRoadmap = async () => {
+    if (!goal.trim()) {
+      return setRoadmap("❌ Please enter a clear career goal.");
+    }
     setLoading(true);
+    setRoadmap("");
     try {
       const res = await axios.post(
         "http://localhost:5000/api/roadmap/generate",
@@ -35,166 +38,105 @@ const CareerRoadmap = () => {
           },
         }
       );
-      console.log("roadmap ",res)
-      setRoadmap(res.data.roadmap || "🤖 No response from AI");
+      setRoadmap(res.data.roadmap || "🤖 No roadmap returned by AI.");
     } catch (err) {
-      alert("❌ Error: " + (err.response?.data?.message || err.message));
+      setRoadmap("❌ Error: " + (err.response?.data?.message || err.message));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-300 to-pink-200 overflow-hidden">
-      {/* Animated background blobs */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white flex items-center justify-center relative overflow-hidden">
+      {/* Background Blobs */}
       <motion.div
-        className="absolute w-[36rem] h-[36rem] bg-pink-300 opacity-30 rounded-full -top-40 -left-40 blur-3xl z-0"
-        animate={{ scale: [1, 1.15, 1], rotate: [0, 30, 0] }}
-        transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
+        className="absolute w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 rounded-full -top-48 -left-48 blur-3xl"
+        animate={{ rotate: [0, 360] }}
+        transition={{ repeat: Infinity, duration: 20 }}
       />
       <motion.div
-        className="absolute w-[28rem] h-[28rem] bg-blue-300 opacity-30 rounded-full -bottom-32 -right-32 blur-3xl z-0"
-        animate={{ scale: [1, 1.1, 1], rotate: [0, -30, 0] }}
-        transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
+        className="absolute w-80 h-80 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-20 rounded-full -bottom-40 -right-40 blur-3xl"
+        animate={{ rotate: [0, -360] }}
+        transition={{ repeat: Infinity, duration: 25 }}
       />
 
-      {/* Main Card */}
       <motion.div
-        className="relative z-10 flex flex-col md:flex-row bg-white/95 rounded-3xl shadow-2xl w-full max-w-5xl min-h-[36rem] backdrop-blur-md overflow-hidden"
+        className="relative z-10 flex flex-col md:flex-row w-full max-w-5xl bg-slate-800/50 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden"
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
+        transition={{ duration: 0.8 }}
       >
-        {/* Left Input */}
-        <div className="flex-1 flex flex-col items-center justify-center p-12 bg-gradient-to-br from-white/80 via-purple-50 to-pink-50">
-          <motion.h2
-            className="text-4xl font-extrabold text-center mb-10 text-gray-800 tracking-tight flex items-center gap-3"
-            initial={{ scale: 0.7 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <FaRobot className="text-purple-500" /> RoadmapBot{" "}
-            <span className="inline-block animate-bounce">📈</span>
-          </motion.h2>
+        {/* Back Button */}
+        <button
+          onClick={handleBack}
+          className="absolute top-4 left-4 flex items-center gap-2 text-white/80 hover:text-white"
+        >
+          <FaArrowLeft /> Back
+        </button>
 
-          <div className="w-full flex flex-col items-center gap-10">
-            <div className="relative w-full">
+        {/* Input Section */}
+        <div className="flex-1 p-12 bg-gradient-to-br from-white/10 to-white/20 flex flex-col items-center justify-center gap-8">
+          <motion.h2
+            className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 flex items-center gap-3"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <FaRobot /> Roadmap Generator
+          </motion.h2>
+          <div className="w-full max-w-md flex flex-col gap-6">
+            <div className="relative">
               <FaUserTie className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
-                placeholder="Enter your career goal (e.g. Full Stack Dev in 3 months)"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white/80 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-300 shadow"
+                placeholder="Define your career goal (e.g. Data Scientist in 6 months)"
+                className="w-full pl-10 pr-4 py-3 bg-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
                 disabled={loading}
               />
             </div>
-
             <motion.button
-              onClick={getRoadmap}
+              onClick={generateRoadmap}
               disabled={loading}
-              className={`w-full bg-gradient-to-r from-purple-500 to-pink-400 text-white py-3 rounded-xl font-semibold shadow-md hover:from-pink-400 hover:to-purple-500 hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg ${
-                loading ? "opacity-60 cursor-not-allowed" : ""
+              className={`w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 rounded-xl font-semibold shadow-lg transition ${
+                loading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
               }`}
-              whileHover={{ scale: loading ? 1 : 1.04 }}
               whileTap={{ scale: loading ? 1 : 0.97 }}
             >
               {loading ? (
                 <>
-                  <svg
-                    className="animate-spin h-6 w-6 mr-2 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
-                  Generating...
+                  <FaCircleNotch className="animate-spin" /> Generating...
                 </>
               ) : (
-                <>
-                  Generate Roadmap <span className="animate-pulse">🚀</span>
-                </>
+                "Generate Roadmap"
               )}
             </motion.button>
           </div>
         </div>
 
-        {/* Right Output */}
-        <div className="flex-1 flex flex-col bg-gradient-to-br from-purple-50 via-pink-50 to-white/80 p-0 border-l border-purple-100 min-h-[36rem]">
-          <div className="flex items-center gap-2 px-10 pt-10 pb-4">
-            <FaRobot className="text-2xl text-pink-500" />
-            <span className="text-2xl font-bold text-gray-700">
-              Career Roadmap
-            </span>
-            <span className="ml-2 animate-pulse">💬</span>
+        {/* Output Section */}
+        <div className="flex-1 p-8 bg-gradient-to-br max-h-[600px] from-white/20 to-white/10 flex flex-col">
+          <div className="flex items-center gap-2 mb-4">
+            <FaRobot className="text-2xl text-pink-400" />
+            <h3 className="text-2xl font-bold text-white">Your Roadmap</h3>
           </div>
-
-          <div className="flex-1 px-10 pb-10 flex items-center">
-            <div className="relative w-full min-h-[22rem] max-h-[28rem] rounded-2xl bg-white/95 border border-purple-200 shadow-xl transition-all duration-300 flex items-start justify-center overflow-auto">
-              {loading ? (
-                <div className="flex flex-col items-center justify-center w-full h-full text-center py-8">
-                  <svg
-                    className="animate-spin h-12 w-12 text-purple-400 mb-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
-                  <span className="text-lg font-semibold text-purple-500">
-                    Generating your custom roadmap...
-                  </span>
-                  <span className="text-gray-400 text-sm mt-2">
-                    Hold tight, it's worth the wait.
-                  </span>
-                </div>
-              ) : roadmap ? (
-                <motion.div
-                  className="whitespace-pre-wrap text-gray-800 text-base leading-relaxed w-full text-left px-4 break-words"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {roadmap}
-                </motion.div>
-              ) : (
-                <div className="flex flex-col items-center justify-center w-full h-full text-center py-8">
-                  <FaRobot className="text-4xl text-purple-200 mb-2 animate-bounce" />
-                  <span className="text-lg font-medium text-gray-400">
-                    Your roadmap will appear here! ✨
-                  </span>
-                </div>
-              )}
-            </div>
+          <div className="flex-1 bg-slate-900/70 rounded-2xl p-4 overflow-auto">
+            {loading ? (
+              <div className="flex flex-col items-center justify-center h-full text-gray-300">
+                <FaCircleNotch className="animate-spin text-4xl mb-2" />
+                <p>Crafting your roadmap...</p>
+              </div>
+            ) : roadmap ? (
+              <pre className="whitespace-pre-wrap text-gray-100">{roadmap}</pre>
+            ) : (
+              <p className="text-gray-400 text-center mt-40">
+                Your personalized roadmap will appear here.
+              </p>
+            )}
           </div>
         </div>
       </motion.div>
     </div>
   );
-};
-
-export default CareerRoadmap;
+}

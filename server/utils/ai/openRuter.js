@@ -47,6 +47,7 @@ Generate 10 realistic and relevant technical interview questions for this specif
 Your tone should be professional, helpful, and slightly encouraging — like a supportive mentor guiding a candidate.
 
 Please ensure all content is formatted clearly and easy to understand. Avoid Markdown symbols like **, ##, or # in the output.
+Make sure always start with welcome in careerMentor.Ai just like welcoming neture then after start.
 `;
 
   return perplexityChat(prompt);
@@ -63,6 +64,11 @@ Please provide a detailed career roadmap including:
 4. Practice ideas
 5. Free resource links
 6. Tips for staying motivated
+
+
+Please ensure all content is formatted clearly and easy to understand. Avoid Markdown symbols like **, ##, or # in the output.
+Make sure always start with welcome in careerMentor.Ai just like welcoming neture then after start.
+
 `;
   return perplexityChat(prompt);
 }
@@ -72,6 +78,8 @@ async function careerMentor(question) {
 You are a friendly and practical career mentor for developers. Please answer clearly and helpfully:
 
 Question: ${question}
+Please ensure all content is formatted clearly and easy to understand. Avoid Markdown symbols like **, ##, or # in the output.
+Make sure always start with welcome in careerMentor.Ai just like welcoming neture then after start.
 `;
   return perplexityChat(prompt);
 }

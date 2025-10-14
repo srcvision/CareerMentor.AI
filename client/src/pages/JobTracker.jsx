@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { AuthContext } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
-// eslint-disable-next-line no-unused-vars
+import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import {
   FaBuilding,
@@ -11,9 +10,11 @@ import {
   FaBriefcase,
   FaPlusCircle,
   FaClipboardList,
+  FaArrowLeft,
+  FaCircleNotch,
 } from "react-icons/fa";
 
-const JobTracker = () => {
+export default function JobTracker() {
   const [jobs, setJobs] = useState([]);
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -22,30 +23,46 @@ const JobTracker = () => {
   const [jobType, setJobType] = useState("full-time");
   const [editId, setEditId] = useState(null);
   const [editStatus, setEditStatus] = useState("");
-  const Location = useLocation();
-  const navigate = useNavigate();
+  const [loadingAdd, setLoadingAdd] = useState(false);
+  const [loadingJobs, setLoadingJobs] = useState(false);
 
   const { user } = useContext(AuthContext);
+  const loc = useLocation();
+  const navigate = useNavigate();
+
+  const API_URL = "http://localhost:5000/api/jobs";
+
+  useEffect(() => {
+    if (!loc.state?.fromDashboard) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [loc, navigate]);
+
+  useEffect(() => {
+    if (user?.token) fetchJobs();
+  }, [user]);
+
+  const handleBack = () => navigate(-1);
 
   const fetchJobs = async () => {
+    setLoadingJobs(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/jobs", {
+      const res = await axios.get(API_URL, {
         headers: { Authorization: `Bearer ${user?.token}` },
       });
-      
-     
       setJobs(res.data.data);
-      console.log("Jobs fetched successfully:", res.data.data);
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
+    } catch (err) {
+      console.error(err);
     }
+    setLoadingJobs(false);
   };
 
   const addJob = async (e) => {
     e.preventDefault();
+    setLoadingAdd(true);
     try {
       await axios.post(
-        "http://localhost:5000/api/jobs",
+        API_URL,
         { company, role, status, location, jobType },
         { headers: { Authorization: `Bearer ${user?.token}` } }
       );
@@ -54,254 +71,243 @@ const JobTracker = () => {
       setStatus("applied");
       setLocation("");
       setJobType("full-time");
-      fetchJobs(); // Refresh list
-      console.log("Job added successfully");
-    } catch (error) {
-      console.error("Error adding job:", error);
+      fetchJobs();
+    } catch (err) {
+      console.error(err);
     }
+    setLoadingAdd(false);
   };
 
   const handleEdit = (job) => {
     setEditId(job._id);
-    setEditStatus(job.status);
-  };
-
-  const handleEditStatusChange = (e) => {
-    setEditStatus(e.target.value);
+    setEditStatus(job.status || "applied");
   };
 
   const handleEditDone = async (job) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/jobs/${job._id}`,
+        `${API_URL}/${job._id}`,
         { ...job, status: editStatus },
-        { headers: { Authorization: `Bearer ${user?.token}`} }
+        { headers: { Authorization: `Bearer ${user?.token}` } }
       );
       setEditId(null);
-      setEditStatus("");
       fetchJobs();
-    } catch (error) {
-      console.error("Error updating job status:", error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  useEffect(() => {
-    if (user?.token) {
-      fetchJobs();
-    }
-  }, [user]);
-
-
-  useEffect(() => {
-    if (Location.state?.fromDashboard) {
-      // Optionally clear the state if you want
-      // navigate(location.pathname, { replace: true, state: {} });
-    } else {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [Location, navigate]);
-
-  // Job stats for summary bar
   const stats = [
-    { label: "Applied", color: "bg-blue-100 text-blue-700", count: jobs.filter(j => j.status === "applied").length },
-    { label: "Interviewed", color: "bg-yellow-100 text-yellow-700", count: jobs.filter(j => j.status === "interviewed").length },
-    { label: "Hired", color: "bg-green-100 text-green-700", count: jobs.filter(j => j.status === "hired").length },
-    { label: "Rejected", color: "bg-red-100 text-red-700", count: jobs.filter(j => j.status === "rejected").length },
+    {
+      label: "Applied",
+      color: "bg-blue-100 text-blue-700",
+      count: jobs.filter((j) => j.status === "applied").length,
+    },
+    {
+      label: "Interviewed",
+      color: "bg-yellow-100 text-yellow-700",
+      count: jobs.filter((j) => j.status === "interviewed").length,
+    },
+    {
+      label: "Hired",
+      color: "bg-green-100 text-green-700",
+      count: jobs.filter((j) => j.status === "hired").length,
+    },
+    {
+      label: "Rejected",
+      color: "bg-red-100 text-red-700",
+      count: jobs.filter((j) => j.status === "rejected").length,
+    },
   ];
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-green-400 to-purple-500 overflow-hidden">
-      {/* Animated background blobs */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white flex items-center justify-center relative p-4 overflow-hidden">
+      {/* Background Glow */}
       <motion.div
-        className="absolute w-[36rem] h-[36rem] bg-green-400 opacity-30 rounded-full -top-40 -left-40 blur-3xl z-0"
-        animate={{ scale: [1, 1.15, 1], rotate: [0, 30, 0] }}
-        transition={{ repeat: Infinity, duration: 9, ease: "easeInOut" }}
+        className="absolute w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 rounded-full -top-48 -left-48 blur-3xl"
+        animate={{ rotate: [0, 360] }}
+        transition={{ repeat: Infinity, duration: 25 }}
       />
       <motion.div
-        className="absolute w-[28rem] h-[28rem] bg-blue-400 opacity-30 rounded-full -bottom-32 -right-32 blur-3xl z-0"
-        animate={{ scale: [1, 1.1, 1], rotate: [0, -30, 0] }}
-        transition={{ repeat: Infinity, duration: 11, ease: "easeInOut" }}
+        className="absolute w-80 h-80 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-20 rounded-full -bottom-40 -right-40 blur-3xl"
+        animate={{ rotate: [0, -360] }}
+        transition={{ repeat: Infinity, duration: 30 }}
       />
 
-      {/* Main App Layout */}
       <motion.div
-        className="relative z-10 flex flex-col md:flex-row bg-white/90 rounded-3xl shadow-2xl w-full max-w-6xl min-h-[36rem] backdrop-blur-md overflow-hidden"
+        className="relative z-10 flex  flex-col md:flex-row w-full max-w-76xl bg-slate-800/60 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/10"
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
+        transition={{ duration: 0.8 }}
       >
-        {/* Sidebar: Add Job Form */}
-        <div className="md:w-1/3 w-full flex flex-col items-center justify-start p-10 bg-gradient-to-br from-white/80 via-blue-50 to-green-50 border-r border-blue-100 min-h-[36rem]">
+        {/* Back Button */}
+        <button
+          onClick={handleBack}
+          className="absolute top-4 left-4 flex items-center gap-2 text-white/80 hover:text-white"
+        >
+          <FaArrowLeft /> Back
+        </button>
+
+        {/* Add Job Panel */}
+        <div className="md:w-1/3 w-full p-8 bg-gradient-to-br from-white/10 to-white/20 flex flex-col gap-6 border-r border-white/10">
           <motion.h2
-            className="text-3xl font-extrabold text-center mb-8 text-gray-800 tracking-tight flex items-center gap-3"
-            initial={{ scale: 0.7 }}
+            className="text-2xl font-black mt-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 flex items-center gap-2"
+            initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.6 }}
           >
-            <FaClipboardList className="text-blue-500" /> Job Tracker
-            <span className="inline-block animate-bounce">🗂️</span>
+            <FaPlusCircle /> Add Job
           </motion.h2>
-          <form
-            onSubmit={addJob}
-            className="w-full flex flex-col gap-6"
-          >
-            <div className="relative">
-              <FaBuilding className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+
+          <form onSubmit={addJob} className="flex flex-col gap-4">
+            {[ 
+              { value: company, set: setCompany, placeholder: "Company" },
+              { value: role, set: setRole, placeholder: "Role" },
+              { value: location, set: setLocation, placeholder: "Location" },
+            ].map((input, i) => (
               <input
-                type="text"
-                placeholder="Company"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
+                key={i}
+                className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-400 focus:outline-none transition"
+                placeholder={input.placeholder}
+                value={input.value}
+                onChange={(e) => input.set(e.target.value)}
                 required
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white/80"
               />
-            </div>
-            <div className="relative">
-              <FaUserTie className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white/80"
-              />
-            </div>
-            <div>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-300 rounded-xl bg-white/80"
-              >
-                <option value="applied">Applied</option>
-                <option value="interviewed">Interviewed</option>
-                <option value="hired">Hired</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-            <div className="relative">
-              <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                required
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-white/80"
-              />
-            </div>
-            <div>
-              <select
-                value={jobType}
-                onChange={(e) => setJobType(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-300 rounded-xl bg-white/80"
-              >
-                <option value="full-time">Full-Time</option>
-                <option value="part-time">Part-Time</option>
-                <option value="contract">Contract</option>
-                <option value="internship">Internship</option>
-              </select>
-            </div>
+            ))}
+            <select
+              className="w-full p-3 rounded-xl bg-white/20 text-white"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value="applied" className="bg-black/80 text-white">Applied</option>
+              <option value="interviewed" className="bg-black/80 text-white">Interviewed</option>
+              <option value="hired" className="bg-black/80 text-white">Hired</option>
+              <option value="rejected" className="bg-black/80 text-white">Rejected</option>
+            </select>
+
+            <select
+              className="w-full p-3 rounded-xl bg-white/20 text-white"
+              value={jobType}
+              onChange={(e) => setJobType(e.target.value)}
+            >
+              <option value="full-time" className="bg-black/80 text-white">Full-Time</option>
+              <option value="part-time" className="bg-black/80 text-white">Part-Time</option>
+              <option value="contract" className="bg-black/80 text-white">Contract</option>
+              <option value="internship" className="bg-black/80 text-white">Internship</option>
+            </select>
+
             <motion.button
               type="submit"
-              className="col-span-1 md:col-span-2 w-full bg-gradient-to-r from-blue-600 to-green-500 text-white py-3 rounded-xl font-semibold shadow-md hover:from-green-500 hover:to-blue-600 transition-all flex items-center justify-center gap-2 text-lg"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
+              disabled={loadingAdd}
+              className={`w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 py-3 rounded-xl font-semibold transition ${
+                loadingAdd ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
+              }`}
+              whileTap={{ scale: loadingAdd ? 1 : 0.97 }}
             >
-              <FaPlusCircle /> Add Job <span className="animate-pulse">✨</span>
+              {loadingAdd ? <FaCircleNotch className="animate-spin" /> : <FaPlusCircle />}
+              {loadingAdd ? "Adding..." : "Add Job"}
             </motion.button>
           </form>
         </div>
 
-        {/* Main Content: Job List */}
-        <div className="flex-1 flex flex-col p-10 bg-gradient-to-br from-blue-50 via-green-50 to-white/80 min-h-[36rem]">
-          {/* Summary Bar */}
-          <div className="flex flex-wrap gap-4 mb-8 justify-center">
-            {stats.map(stat => (
-              <div key={stat.label} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold shadow ${stat.color}`}>
-                <span>{stat.label}</span>
-                <span className="text-lg">{stat.count}</span>
+        {/* Job List */}
+        <div className="flex-1 p-8 flex flex-col max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-slate-800">
+          {/* Stats */}
+          <div className="flex flex-wrap gap-3 mb-6 justify-center">
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                className={`${s.color} px-4 py-2 rounded-xl font-bold bg-opacity-90 shadow`}
+              >
+                {s.label}: {s.count}
               </div>
             ))}
           </div>
-          <div className="flex items-center gap-2 mb-8">
-            <FaClipboardList className="text-green-500 text-2xl" />
-            <span className="text-2xl font-bold text-gray-700">Your Jobs</span>
-            <span className="ml-2 animate-bounce">📋</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {jobs.length > 0 ? (
-              jobs.map((job) => (
+
+          <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-4 flex items-center gap-2">
+            <FaClipboardList /> Your Jobs
+          </h3>
+
+          {loadingJobs ? (
+            <div className="flex-1 flex items-center justify-center text-gray-400">
+              <FaCircleNotch className="animate-spin text-4xl" />
+            </div>
+          ) : jobs.length === 0 ? (
+            <div className="flex-1 flex items-center justify-center text-gray-400">
+              No jobs yet. Add one!
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {jobs.map((job) => (
                 <motion.div
                   key={job._id}
-                  className="bg-white/95 p-6 rounded-2xl shadow-xl flex flex-col gap-3 border border-gray-100 hover:border-green-400 transition-all duration-300 relative group"
-                  style={{ minHeight: "unset", height: "auto" }}
-                  whileHover={{ scale: 1.03, y: -2 }}
+                  className="bg-slate-800/70 p-4 rounded-2xl flex flex-col gap-3 shadow-lg border border-white/10 hover:border-purple-400/40 transition"
+                  whileHover={{ scale: 1.03, y: -4 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <div className="flex flex-col gap-1 mb-2">
-                    <div className="flex flex-row flex-wrap items-center justify-between gap-2 w-full">
-                      <div className="font-bold text-xl text-blue-800 flex items-center gap-1 break-words min-w-0">
-                        <FaUserTie />
-                        <span className="break-words w-full">{job.role}</span>
-                      </div>
-                      <div className="flex-shrink-0 mt-2 sm:mt-0">
-                        {editId === job._id ? (
-                          <select
-                            value={editStatus}
-                            onChange={handleEditStatusChange}
-                            className="px-3 py-1 rounded-full text-xs font-bold capitalize shadow border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 text-blue-700"
-                          >
-                            <option value="applied">Applied</option>
-                            <option value="interviewed">Interviewed</option>
-                            <option value="hired">Hired</option>
-                            <option value="rejected">Rejected</option>
-                          </select>
-                        ) : (
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold capitalize shadow block whitespace-nowrap ${job.status === 'applied' ? 'bg-blue-100 text-blue-700' : job.status === 'interviewed' ? 'bg-yellow-100 text-yellow-700' : job.status === 'hired' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                            {job.status}
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-lg">{job.role}</span>
+                    {editId === job._id ? (
+                      <select
+                        value={editStatus}
+                        onChange={(e) => setEditStatus(e.target.value)}
+                        className="rounded-full bg-white/20 text-white px-2 py-1 text-sm"
+                      >
+                        <option value="applied" className="bg-black/80 text-white">Applied</option>
+                        <option value="interviewed" className="bg-black/80 text-white">Interviewed</option>
+                        <option value="hired" className="bg-black/80 text-white">Hired</option>
+                        <option value="rejected" className="bg-black/80 text-white">Rejected</option>
+                      </select>
+                    ) : (
+                      <span
+                        className={`px-2 py-1 rounded-full text-sm capitalize ${
+                          job.status === "applied"
+                            ? "bg-blue-500"
+                            : job.status === "interviewed"
+                            ? "bg-yellow-500"
+                            : job.status === "hired"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    )}
                   </div>
-                  <div className="text-gray-700 flex items-center gap-2 mb-1">
-                    <FaBuilding className="text-lg text-blue-400" />
-                    <span className="font-semibold break-words">{job.company}</span>
+                  <div className="text-gray-300">{job.company}</div>
+                  <div className="flex flex-wrap gap-2 text-sm text-gray-400">
+                    <span className="flex items-center gap-1">
+                      <FaMapMarkerAlt />
+                      {job.location}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FaBriefcase />
+                      {job.jobType}
+                    </span>
                   </div>
-                  <div className="flex flex-wrap gap-3 mt-2">
-                    <div className="flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full text-sm text-blue-700"><FaMapMarkerAlt /> {job.location}</div>
-                    <div className="flex items-center gap-1 bg-green-50 px-3 py-1 rounded-full text-sm text-green-700"><FaBriefcase /> {job.jobType}</div>
-                  </div>
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                  <div className="mt-auto flex gap-2">
                     {editId === job._id ? (
                       <button
-                        className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-xs"
                         onClick={() => handleEditDone(job)}
+                        className="flex-1 bg-green-500 py-1 rounded text-white text-sm hover:bg-green-600 transition"
                       >
-                        Done
+                        Save
                       </button>
                     ) : (
                       <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-xs"
                         onClick={() => handleEdit(job)}
+                        className="flex-1 bg-blue-500 py-1 rounded text-white text-sm hover:bg-blue-600 transition"
                       >
                         Edit
                       </button>
                     )}
                   </div>
                 </motion.div>
-              ))
-            ) : (
-              <div className="col-span-full flex flex-col items-center justify-center text-gray-400 py-16">
-                <FaClipboardList className="text-5xl mb-4 animate-bounce" />
-                <span className="text-lg font-medium">No jobs found. Start by adding a job! 😕</span>
-              </div>
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </motion.div>
     </div>
   );
-};
-
-export default JobTracker;
+}
