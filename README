@@ -1,22 +1,19 @@
-# CareerMentor.AI - MERN + AI Project Guide
+# CareerMentor.AI - Next-Gen Career Platform (MERN + AI)
 
-## 🚀 Project Summary
+## 🚀 Project Overview
 
-**CareerMentor.AI** is a comprehensive MERN stack platform enhanced with AI capabilities. It serves as a job tracker, interview preparation tool, community forum, resume analyzer, and mock interview platform. Ideal for students and job seekers.
+**CareerMentor.AI** is an advanced, AI-driven career development platform built on the MERN stack. It empowers students and job seekers with intelligent tools for resume analysis, interview preparation, job tracking, and community engagement. Leveraging the Perplexity API for AI features, CareerMentor.AI delivers actionable insights and a seamless, modern user experience.
 
 ---
 
-## 🧱 Core Technologies
+## 🧩 Core Technologies
 
-* **Frontend**: React.js, Tailwind CSS, React Router
-* **Backend**: Node.js, Express.js
-* **Database**: MongoDB (Cloud via MongoDB Atlas)
-* **Authentication**: JWT
-* **AI Tools**:
-
-  * OpenAI GPT-4 (for Resume Feedback, AI Q\&A, Mock Interviews)
-  * OpenAI Whisper or Web Speech API (for Voice Input)
-  * LangChain (optional, for advanced AI workflows)
+- **Frontend:** React.js, Tailwind CSS, React Router, Framer Motion
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas (Cloud)
+- **Authentication:** JWT (JSON Web Tokens)
+- **AI Integration:** Perplexity API (for Resume Feedback, AI Q&A, Mock Interviews)
+- **Voice Input:** Web Speech API or Perplexity (if supported)
 
 ---
 
@@ -24,146 +21,98 @@
 
 ```
 project-root/
-├── client/              # React frontend
-├── server/              # Node/Express backend
-├── models/              # Mongoose models
-├── routes/              # API routes
-├── controllers/         # Logic for each route
-├── utils/ai/            # AI utility functions
-├── middleware/          # Auth and error middleware
-└── config/              # DB and API config
+├── client/              # React frontend (UI, animations, API calls)
+├── server/              # Node/Express backend (API endpoints)
+├── models/              # Mongoose models (data schemas)
+├── routes/              # API routes (RESTful endpoints)
+├── controllers/         # Business logic for each route
+├── utils/ai/            # AI utility functions (Perplexity integration)
+├── middleware/          # Auth, error handling, etc.
+└── config/              # DB and API configuration
 ```
 
 ---
 
-## 🗺️ Feature Modules
+## 🌟 What CareerMentor.AI Can Do
 
-### 1. **Authentication (Login/Register)**
-
-* JWT-based login system
-* Role-based (Admin, User)
-
-### 2. **Dashboard**
-
-* Overview of job applications, interview tasks, AI feedback
-
-### 3. **Job Tracker (from Project 6)**
-
-* CRUD for job applications
-* Status: Applied, Interviewed, Rejected, Hired
-
-### 4. **Interview Prep (from Project 2)**
-
-* CRUD for company-specific Q\&A
-* Timer, checklist for revision
-
-### 5. **Resume Analyzer (from Project 1)**
-
-* Upload PDF Resume
-* Use OpenAI to:
-
-  * Analyze structure, skills, formatting
-  * Return suggestions and rating
-
-### 6. **College Connect Forum (from Project 3)**
-
-* Post doubts, like, comment
-* AI replies via OpenAI (thread starter or suggestions)
-
-### 7. **AI Mock Interviews (from Project 10)**
-
-* Select topic (DSA, React, etc.)
-* AI asks questions, evaluates user input
-* Scores or gives tips
+- **AI Resume Optimizer:** Instantly analyze your resume and receive tailored, actionable feedback for ATS optimization, keyword density, and formatting—powered by Perplexity AI.
+- **Smart Interview Coach:** Practice with AI-driven mock interviews for any job role, with real-time, personalized feedback and coaching.
+- **Career Roadmap AI:** Get a dynamic, personalized learning and career advancement path, including skills assessment and milestone tracking.
+- **24/7 AI Career Mentor:** Access expert career advice and answers to your questions anytime, anywhere.
+- **Smart Job Tracker:** Organize and track your job applications, receive analytics, reminders, and market insights.
+- **Community Forum:** Post questions, share experiences, and get AI-powered suggestions and peer support.
+- **Voice Input:** Use voice to interact with AI features (where supported).
+- **Secure User Authentication:** Register, log in, and manage your personalized dashboard securely.
+- **Animated, Responsive UI:** Enjoy a visually stunning, interactive experience on any device.
 
 ---
 
-## 📌 Step-by-Step Development Plan
+## ✨ Key Features
 
-### ✅ Week 1: Initial Setup & Auth
-
-* [ ] Setup GitHub repo
-* [ ] Create MERN boilerplate (React + Express)
-* [ ] Setup MongoDB Atlas
-* [ ] Implement Register/Login (JWT)
-
-### ✅ Week 2: Resume Analyzer & Job Tracker
-
-* [ ] Use `Multer` to upload PDF
-* [ ] Use `pdf-parse` to extract text
-* [ ] Integrate OpenAI GPT API for feedback
-* [ ] Build Job Tracker frontend & backend (CRUD)
-
-### ✅ Week 3: Interview Prep & Forum
-
-* [ ] Interview Prep Page (Add, edit questions)
-* [ ] Forum Page: Post doubts
-* [ ] Add AI suggestion logic using GPT-4
-
-### ✅ Week 4: AI Interview + Voice
-
-* [ ] Create Mock Interview bot with OpenAI
-* [ ] Add Web Speech API for voice input
-* [ ] Save answers, generate feedback
-
-### ✅ Week 5: Finishing & Deploying
-
-* [ ] UI Polishing with Tailwind CSS
-* [ ] Error Handling, Loading States
-* [ ] Deploy Frontend (Netlify) + Backend (Render)
-* [ ] Set up MongoDB Atlas connection string
+1. **Authentication:** Secure JWT-based login and registration, with role-based access (Admin, User).
+2. **Dashboard:** Centralized overview of your job applications, interview tasks, and AI feedback.
+3. **Job Tracker:** Effortlessly manage your job applications with status tracking (Applied, Interviewed, Rejected, Hired).
+4. **Interview Prep:** Create, edit, and practice company-specific Q&A, with revision tools and AI suggestions.
+5. **Resume Analyzer:** Upload your PDF resume and receive in-depth analysis and improvement tips from Perplexity AI.
+6. **Community Forum:** Engage with peers, post doubts, and receive AI-generated suggestions and answers.
+7. **AI Mock Interviews:** Select topics (e.g., DSA, React) and experience realistic, AI-evaluated mock interviews.
+8. **Voice Interaction:** Use voice input for hands-free AI engagement (where available).
+9. **Modern UI/UX:** Animated, gradient-rich, and responsive design for an engaging user journey.
 
 ---
 
-## 🔌 Required APIs and Tools
+## 🔗 API & Tools
 
-### 🔑 OpenAI API
-
-* **Signup**: [https://platform.openai.com/signup](https://platform.openai.com/signup)
-* **Docs**: [https://platform.openai.com/docs](https://platform.openai.com/docs)
-* **Models Used**: `gpt-4`, `gpt-3.5-turbo`, `whisper-1`
-* **Pricing**: [https://openai.com/pricing](https://openai.com/pricing)
-
-### 📁 PDF Parsing
-
-* Library: `pdf-parse`
-* GitHub: [https://github.com/modesty/pdf-parse](https://github.com/modesty/pdf-parse)
-
-### 📢 Web Speech API (Browser-based voice input)
-
-* Docs: [https://developer.mozilla.org/en-US/docs/Web/API/Web\_Speech\_API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
-
-### 🧠 LangChain (Optional for advanced chains)
-
-* Docs: [https://js.langchain.com](https://js.langchain.com)
-
-### 🌐 MongoDB Atlas
-
-* Setup: [https://www.mongodb.com/cloud/atlas/register](https://www.mongodb.com/cloud/atlas/register)
-* Free tier available
-
-### 🖼 Deployment
-
-* **Frontend**: [https://www.netlify.com/](https://www.netlify.com/)
-* **Backend**: [https://render.com/](https://render.com/)
+- **Perplexity API:**
+  - [https://www.perplexity.ai/](https://www.perplexity.ai/)
+  - Used for all AI-powered features (resume feedback, Q&A, mock interviews, etc.)
+- **Web Speech API:**
+  - [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
+  - Enables browser-based voice input.
+- **PDF Parsing:**
+  - Library: `pdf-parse` ([GitHub](https://github.com/modesty/pdf-parse))
+- **Deployment:**
+  - **Frontend:** [Netlify](https://www.netlify.com/)
+  - **Backend:** [Render](https://render.com/)
+  - **Database:** [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
 
 ---
 
-## ✅ Future Enhancements
+## 🛠️ Getting Started
 
-* AI Mentor Recommendations
-* Real-time Chat with Socket.IO
-* Interview Transcription with Whisper
-* Resume Parser with Skill Match Scoring
+1. **Clone the repository**
+2. **Install dependencies**
+   ```
+   npm install
+   ```
+3. **Configure environment variables** (API keys, DB URIs, etc.)
+4. **Start the development servers**
+   ```
+   npm start
+   ```
+5. **Access the app** at [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 📞 Support
+## 🚀 Future Enhancements
 
-For any errors, tips or project collaboration, feel free to reach out or comment in the forum section of the app.
+- AI-driven mentor recommendations
+- Real-time chat with Socket.IO
+- Interview transcription with advanced AI
+- Resume parser with skill match scoring
+- Enhanced analytics and reporting
 
 ---
 
-## ✅ Ready to Start?
+## 🤝 Contribution & Support
 
-If you want the code templates, folder setup, and prompt examples for OpenAI—just ask and we'll begin building!
+- Follow best practices for React, Node, and Tailwind CSS
+- Use modular, reusable components
+- Document new features and utilities
+- For questions or collaboration, use the community forum or contact the maintainers
+
+---
+
+## 📄 License
+
+This project is intended for educational and demonstration purposes only.
