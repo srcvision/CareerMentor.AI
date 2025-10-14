@@ -1,6 +1,6 @@
 # CareerMentor.AI - AI-Powered Career Development Platform
 
-
+<div align="center">
 
 ![CareerMentor.AI Logo](https://img.shields.io/badge/CareerMentor.AI-Next%20Gen%20Platform-purple?style=for-the-badge)
 
@@ -14,7 +14,7 @@
 
 [🚀 Live Demo](https://careermentor-ai.vercel.app) • [📖 Documentation](#documentation) • [🎯 Features](#features) • [🛠️ Installation](#installation)
 
-
+</div>
 
 ---
 
@@ -351,7 +351,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+<div align="center">
+
 **⭐ If you found this project helpful, please give it a star!**
 
 [![GitHub stars](https://img.shields.io/github/stars/srcvision/CareerMentor.AI?style=social)](https://github.com/srcvision/CareerMentor.AI)
 [![GitHub forks](https://img.shields.io/github/forks/srcvision/CareerMentor.AI?style=social)](https://github.com/srcvision/CareerMentor.AI)
+
+</div>
