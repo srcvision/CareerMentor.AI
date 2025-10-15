@@ -10,6 +10,7 @@ import CareerRoadmap from "./pages/CareerRoadmap";
 import CareerMentor from "./pages/CareerMentor";
 import LandingPage from "./pages/LandingPage";
 import About from "./pages/About";
+import Howwork from "./pages/Howwork";  
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
@@ -23,6 +24,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={ <HomeRoutes />} />
       <Route path="/about" element={<About />} />
+      <Route path="/seehowwork" element={<Howwork />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />

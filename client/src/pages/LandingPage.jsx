@@ -239,7 +239,7 @@ export default function LandingPage() {
             whileTap={{ scale: 0.95 }}
           >
             <Link
-              to="/signup"
+              to="/login"
               className="group relative bg-gradient-to-r from-purple-500 to-pink-500 px-10 py-4 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 overflow-hidden"
             >
               <span className="relative z-10 flex items-center gap-3">
@@ -254,12 +254,14 @@ export default function LandingPage() {
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
           >
-            <button className="group border-2 border-purple-400 px-10 py-4 rounded-2xl font-bold text-xl text-purple-400 hover:bg-purple-400 hover:text-white transition-all duration-300">
+            <Link
+            to="/seehowwork"
+            className="group border-2 border-purple-400 px-10 py-4 rounded-2xl font-bold text-xl text-purple-400 hover:bg-purple-400 hover:text-white transition-all duration-300">
               <span className="flex items-center gap-3">
                 <FaLightbulb className="group-hover:animate-pulse" />
                 See How It Works
               </span>
-            </button>
+            </Link>
           </motion.div>
         </motion.div>
 
