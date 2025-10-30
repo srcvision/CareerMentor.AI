@@ -34,7 +34,7 @@ export default function InterviewBot() {
     setResponse("");
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/interview/generate",
+        `${process.env.API_URL}api/interview/generate`,
         { role },
         {
           headers: {
