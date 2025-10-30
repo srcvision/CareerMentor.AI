@@ -1,422 +1,415 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  FaStar,
+  FaUser,
+  FaArrowRight,
   FaFileAlt,
   FaRobot,
   FaRoad,
-  FaUserTie,
   FaBriefcase,
-  FaArrowRight,
-  FaLightbulb,
-  FaUser,
   FaUserPlus,
+  FaUserTie,
+  FaLock,
+  FaConnectdevelop,
 } from "react-icons/fa";
-import { Sparkles } from "lucide-react";
-import logo from "../assets/generated-image.png";
+import { Sparkles, CheckSquare, Zap, Clock, TrendingUp } from "lucide-react";
 
+// Simplified data structure for a cleaner, minimal design
 const features = [
   {
-    icon: <FaFileAlt className="text-blue-500" />,
-    emoji: "📝",
-    title: "AI Resume Optimizer",
-    desc: "Transform your resume with intelligent analysis and actionable insights.",
-    detail:
-      "Advanced AI algorithms scan for ATS optimization, keyword density, and format improvements to maximize your interview potential.",
-    color: "from-blue-500 to-cyan-500",
+    icon: FaFileAlt,
+    title: "AI Resume Optimization",
+    desc: "Intelligent analysis for ATS compatibility and keyword density.",
   },
   {
-    icon: <FaRobot className="text-emerald-500" />,
-    emoji: "🎤",
+    icon: FaRobot,
     title: "Smart Interview Coach",
-    desc: "Practice with AI-powered mock interviews tailored to your industry.",
-    detail:
-      "Real-time feedback on your responses, body language analysis, and personalized coaching to boost your confidence.",
-    color: "from-emerald-500 to-green-500",
+    desc: "Real-time feedback on responses with industry-specific mock interviews.",
   },
   {
-    icon: <FaRoad className="text-purple-500" />,
-    emoji: "🗺️",
-    title: "Career Roadmap AI",
-    desc: "Get a personalized learning path crafted by artificial intelligence.",
-    detail:
-      "Dynamic roadmaps with skills assessment, resource recommendations, and milestone tracking for career advancement.",
-    color: "from-purple-500 to-violet-500",
+    icon: FaRoad,
+    title: "Personalized Career Roadmap",
+    desc: "Dynamic learning paths with skill assessment and resource recommendations.",
   },
   {
-    icon: <FaUserTie className="text-orange-500" />,
-    emoji: "👔",
-    title: "24/7 Career Mentor",
-    desc: "Access expert career guidance powered by advanced AI models.",
-    detail:
-      "Instant answers to career questions, strategic advice, and personalized recommendations available round the clock.",
-    color: "from-orange-500 to-red-500",
+    icon: FaUserTie,
+    title: "24/7 Expert Mentorship",
+    desc: "Instant, strategic advice powered by advanced AI models.",
   },
   {
-    icon: <FaBriefcase className="text-cyan-500" />,
-    emoji: "📋",
+    icon: FaBriefcase,
     title: "Smart Job Tracker",
-    desc: "Organize applications with intelligent tracking and insights.",
-    detail:
-      "AI-powered analytics on application success rates, follow-up reminders, and market trend insights.",
-    color: "from-cyan-500 to-teal-500",
+    desc: "Organize applications with success rate analytics and follow-up reminders.",
+  },
+  {
+    icon: FaLock,
+    title: "Privacy & Security",
+    desc: "We ensure your career data is protected with industry-leading security.",
   },
 ];
 
+const howItWorksSteps = [
+  {
+    step: 1,
+    title: "Analyze & Upload",
+    desc: "Securely upload your resume and career goals to our platform.",
+    icon: CheckSquare,
+  },
+  {
+    step: 2,
+    title: "AI Optimization",
+    desc: "Our AI models generate tailored improvements, coaching, and roadmaps.",
+    icon: Zap,
+  },
+  {
+    step: 3,
+    title: "Apply & Grow",
+    desc: "Utilize your optimized assets to land interviews and accelerate your growth.",
+    icon: TrendingUp,
+  },
+];
+
+// Animation variants for consistency
+const containerVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut",
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white relative overflow-hidden">
-      {/* Top Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 p-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl px-6 py-3 flex items-center justify-between">
-            {/* Left: Sign In + Sign Up */}
-            <div className="flex items-center gap-3">
-              <Link
-                to="/login"
-                className="flex items-center gap-2 text-white/90 hover:text-white text-sm font-medium px-4 py-2 rounded-xl border border-purple-500/50 hover:border-purple-400 hover:bg-purple-500/10 transition-all duration-300"
-              >
-                <FaUser className="text-xs" />
-                Sign In
-              </Link>
-              <Link
-                to="/register"
-                className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:from-pink-500 hover:to-purple-500 transition-all duration-300 shadow-lg"
-              >
-                <FaUserPlus className="text-xs" />
-                Sign Up
-              </Link>
-            </div>
+    <div className="min-h-screen bg-white text-gray-900 font-sans antialiased">
+      {/* --- Navigation Bar --- */}
+      <nav className="sticky top-0 z-50 p-4 border-b border-gray-100 backdrop-blur-md bg-white/80 transition-all duration-300">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Logo/Brand */}
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900">
+            <FaConnectdevelop className="text-2xl text-gray-700" />
+            <span className="hidden sm:inline">CareerMentor.AI</span>
+          </Link>
 
-            {/* Center: Logo/Brand */}
-            <div className="hidden md:flex items-center mr-28 gap-2">
-              <FaStar className="text-purple-400 text-lg" />
-              <span className="font-bold text-white/90 tracking-wide">
-                CareerMentor.AI
-              </span>
-            </div>
-
-            {/* Right: About Link */}
-            <div className="flex items-center">
-              <Link
-                to="/about"
-                className="group flex items-center gap-2 text-white/90 hover:text-white text-sm font-medium px-5 py-2 rounded-full bg-slate-800/40 hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 border border-slate-600/30 hover:border-purple-400/50 transition-all duration-300 backdrop-blur-sm hover:scale-105"
-              >
-                <span className="w-2 h-2 rounded-full bg-purple-400 group-hover:bg-pink-400 transition-colors duration-300"></span>
-                About
-              </Link>
-            </div>
+          {/* Nav Links & CTA */}
+          <div className="flex items-center gap-6">
+            <Link to="/about" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition duration-200 hidden md:inline">
+              About
+            </Link>
+            <Link to="/features" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition duration-200 hidden md:inline">
+              Features
+            </Link>
+            
+            <Link
+              to="/login"
+              className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg text-gray-700 hover:text-gray-900 transition duration-200"
+            >
+              <FaUser className="text-xs" />
+              Sign In
+            </Link>
+            <Link
+              to="/register"
+              className="flex items-center gap-2 bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200 shadow-md"
+            >
+              <FaUserPlus className="text-xs" />
+              Sign Up
+            </Link>
           </div>
         </div>
       </nav>
 
-      {/* Enhanced animated background elements */}
-      <motion.div
-        className="absolute w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 rounded-full -top-48 -left-48 blur-3xl"
-        animate={{
-          scale: [1, 1.2, 1],
-          rotate: [0, 180, 360],
-          x: [0, 50, 0],
-          y: [0, -30, 0],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 20,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute w-80 h-80 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-20 rounded-full -bottom-40 -right-40 blur-3xl"
-        animate={{
-          scale: [1, 1.15, 1],
-          rotate: [0, -180, -360],
-          x: [0, -30, 0],
-          y: [0, 20, 0],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 25,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute w-64 h-64 bg-gradient-to-r from-green-400 to-emerald-400 opacity-15 rounded-full top-1/3 right-1/4 blur-3xl"
-        animate={{
-          scale: [1, 1.1, 1],
-          rotate: [0, 90, 180, 270, 360],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 30,
-          ease: "linear",
-        }}
-      />
-
-      {/* Hero Section */}
-      <div className="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-4 pt-25">
-        {/* Brand Logo */}
-        <motion.div
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ duration: 1, ease: "backOut" }}
-          className="mb-8"
-        >
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full blur-2xl opacity-60 animate-pulse"></div>
-            <div className="relative bg-gradient-to-br from-purple-500 to-pink-500 rounded-full p-1 shadow-2xl">
-              <img src={logo} alt="logo" className="w-30 h-30 rounded-full " />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Main Heading with Enhanced Animation */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="mb-6"
-        >
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-4 leading-tight">
-            <span className="block">Welcome to</span>
-            <motion.span
-              className="block bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            >
-              CareerMentor.AI
-            </motion.span>
-            <motion.span
-              className="ml-4 text-5xl"
-              animate={{ rotate: [0, 10, -10, 10, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: 1,
-              }}
-            >
-              🚀
-            </motion.span>
-          </h1>
-        </motion.div>
-
-        {/* Enhanced Subtitle */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="mb-12"
-        >
-          <p className="text-xl md:text-2xl lg:text-3xl text-gray-300 max-w-4xl leading-relaxed">
-            Supercharge your career with{" "}
-            <span className="text-purple-400 font-semibold">
-              next-generation AI technology
-            </span>{" "}
-            — from intelligent resume optimization to personalized career
-            roadmaps.
-            <br />
-            <span className="text-lg text-gray-400 mt-2 block">
-              Join thousands of professionals accelerating their career growth
-              with AI.
-            </span>
-          </p>
-        </motion.div>
-
-        {/* Enhanced CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="flex flex-col sm:flex-row gap-6 mb-16"
-        >
+      {/* --- Main Content Container --- */}
+      <main className="max-w-7xl mx-auto">
+        
+        {/* --- Hero Section --- */}
+        <section className="py-24 md:py-36 px-4 text-center">
           <motion.div
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
           >
-            <Link
-              to="/login"
-              className="group relative bg-gradient-to-r from-purple-500 to-pink-500 px-10 py-4 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 overflow-hidden"
+            <motion.p
+              variants={itemVariants}
+              className="flex items-center justify-center gap-2 mb-4 text-sm font-semibold text-gray-600 uppercase tracking-widest"
             >
-              <span className="relative z-10 flex items-center gap-3">
-                Start Your AI Journey
-                <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </Link>
-          </motion.div>
-
-          <motion.div
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link
-            to="/seehowwork"
-            className="group border-2 border-purple-400 px-10 py-4 rounded-2xl font-bold text-xl text-purple-400 hover:bg-purple-400 hover:text-white transition-all duration-300">
-              <span className="flex items-center gap-3">
-                <FaLightbulb className="group-hover:animate-pulse" />
-                See How It Works
-              </span>
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="text-gray-400"
-        >
-          <p className="text-sm mb-2">Discover Our AI-Powered Features</p>
-          <div className="w-px h-8 bg-gradient-to-b from-purple-400 to-transparent mx-auto"></div>
-        </motion.div>
-      </div>
-
-      {/* Features Section with Enhanced Design */}
-      <div className="relative z-10 py-20 px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl font-black mb-6">
-            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              Powered by Advanced AI
-            </span>
-            <motion.span
-              className="ml-3 text-3xl"
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              <Sparkles className="w-4 h-4 text-gray-500" />
+              AI-Powered Career Acceleration
+            </motion.p>
+            
+            <motion.h1
+              variants={itemVariants}
+              className="text-6xl md:text-8xl font-extrabold mb-6 leading-none tracking-tighter text-gray-900 max-w-5xl mx-auto"
             >
-              ✨
-            </motion.span>
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Experience the future of career development with our comprehensive
-            AI toolkit
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: { staggerChildren: 0.2 },
-            },
-          }}
-        >
-          {features.map(({ icon, emoji, title, desc, detail, color }) => (
+              <span className="block">Navigate Your Career</span> 
+              <span className="block text-gray-700">with Intelligence.</span>
+            </motion.h1>
+            
+            <motion.p
+              variants={itemVariants}
+              className="text-xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed"
+            >
+              CareerMentor.AI delivers intelligent resume optimization, mock interviews, and personalized roadmaps to secure your next opportunity faster.
+            </motion.p>
+            
             <motion.div
-              key={title}
-              className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-3xl p-8 border border-slate-700/50 hover:border-purple-500/50 transition-all duration-500"
-              variants={{
-                hidden: { opacity: 0, y: 50, scale: 0.9 },
-                show: { opacity: 1, y: 0, scale: 1 },
-              }}
-              whileHover={{
-                scale: 1.02,
-                y: -5,
-                boxShadow: "0 20px 40px rgba(147, 51, 234, 0.15)",
-              }}
-              whileTap={{ scale: 0.98 }}
+              variants={itemVariants}
+              className="flex justify-center"
             >
-              {/* Gradient overlay on hover */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500`}
-              ></div>
-
-              <div className="relative z-10">
-                {/* Icon and Emoji */}
-                <div className="flex items-center gap-4 mb-6">
-                  <motion.div
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-4xl"
-                  >
-                    {emoji}
-                  </motion.div>
-                  <div className="text-3xl">{icon}</div>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-2xl font-bold mb-4">
-                  <span
-                    className={`bg-gradient-to-r ${color} bg-clip-text text-transparent`}
-                  >
-                    {title}
-                  </span>
-                </h3>
-
-                {/* Description */}
-                <p className="text-gray-300 text-lg mb-4 leading-relaxed">
-                  {desc}
-                </p>
-
-                {/* Detail */}
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  {detail}
-                </p>
-
-                {/* Hover effect sparkles */}
-                <motion.div
-                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100"
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Link
+                  to="/register"
+                  className="group flex items-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-xl hover:bg-gray-700 transition duration-300"
                 >
-                  <Sparkles className="text-purple-400 text-lg" />
-                </motion.div>
-              </div>
+                  Get Started for Free
+                  <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </motion.div>
             </motion.div>
-          ))}
-        </motion.div>
-      </div>
+            
+            {/* Minimalist Visual */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-16 w-full h-80 bg-gray-100 rounded-2xl border border-gray-200 shadow-inner flex items-center justify-center text-gray-500 text-xl font-medium"
+            >
+              
+            </motion.div>
+          </motion.div>
+        </section>
 
-      {/* Enhanced Footer */}
-      <footer className="relative z-10 py-16 text-center border-t border-slate-800/50">
+        <hr className="border-gray-100" />
+
+        {/* --- About / Mission Section --- */}
+        <section id="mission" className="py-24 px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={containerVariants}
+          >
+            <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 leading-tight">
+              Our Mission: Democratizing Career Success
+            </motion.h2>
+            <motion.p variants={itemVariants} className="text-lg text-gray-600 mb-6 leading-relaxed">
+              In today's competitive job market, getting noticed is tough. Our mission is to **level the playing field** by providing every professional with access to top-tier, AI-driven career mentorship and tools. We transform uncertainty into strategy.
+            </motion.p>
+            <motion.p variants={itemVariants} className="text-lg text-gray-600 leading-relaxed">
+              We solve the problem of generic advice and outdated tools. With CareerMentor.AI, you receive **data-backed, personalized insights** that are constantly updated to reflect current industry trends and hiring practices.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="w-full h-96 bg-gray-100 rounded-2xl border border-gray-200 shadow-lg flex items-center justify-center text-gray-500 text-xl font-medium"
+          >
+            
+          </motion.div>
+        </section>
+
+        <hr className="border-gray-100" />
+
+        {/* --- How It Works Section --- */}
+        <section id="how-it-works" className="py-24 px-4 text-center">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={containerVariants}
+          >
+            <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+              A Simple 3-Step Process
+            </motion.h2>
+            <motion.p variants={itemVariants} className="text-xl text-gray-600 max-w-3xl mx-auto mb-16">
+              Accelerating your career has never been this streamlined.
+            </motion.p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {howItWorksSteps.map(({ step, title, desc, icon: Icon }) => (
+              <motion.div
+                key={step}
+                className="text-left"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.7, delay: step * 0.2 }}
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 flex items-center justify-center bg-gray-900 rounded-full text-white text-xl font-bold shrink-0">
+                    {step}
+                  </div>
+                  <div className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-500 shrink-0">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-semibold mb-3 text-gray-900">{title}</h3>
+                <p className="text-gray-600 leading-relaxed">{desc}</p>
+                {step < howItWorksSteps.length && (
+                  <div className="hidden md:block absolute right-0 top-1/2 -mr-16 w-32 border-t border-dashed border-gray-300"></div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <hr className="border-gray-100" />
+
+        {/* --- Features Section --- */}
+        <section id="features" className="py-24 px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={containerVariants}
+            className="text-center mb-16"
+          >
+            <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+              The Comprehensive AI Toolkit
+            </motion.h2>
+            <motion.p variants={itemVariants} className="text-xl text-gray-600 max-w-3xl mx-auto">
+              All the tools you need for every stage of your job search and career development.
+            </motion.p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map(({ icon: Icon, title, desc }) => (
+              <motion.div
+                key={title}
+                className="bg-gray-50 border border-gray-100 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className="mb-4 w-12 h-12 flex items-center justify-center bg-gray-900 rounded-lg text-white">
+                  <Icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">{title}</h3>
+                <p className="text-gray-600">{desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* --- Trusted By Section (Minimalist Carousel Simulation) --- */}
+        <section id="trusted-by" className="py-16 px-4 border-t border-gray-100">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={containerVariants}
+            className="text-center mb-10"
+          >
+            <motion.h3 variants={itemVariants} className="text-xl font-semibold text-gray-600 mb-8">
+              Trusted by professionals at leading companies
+            </motion.h3>
+          </motion.div>
+          
+          <div className="overflow-hidden relative whitespace-nowrap py-4">
+            <motion.div
+              className="flex justify-between items-center"
+              animate={{ x: ['0%', '-100%'] }}
+              transition={{ x: { duration: 30, ease: 'linear', repeat: Infinity } }}
+            >
+              {[...Array(2)].map((_, i) => ( // Duplicate for seamless loop
+                <div key={i} className="flex space-x-24 px-12 opacity-50">
+                  <span className="text-4xl font-extrabold text-gray-300 hover:text-gray-400 transition-colors duration-300 cursor-default">Google</span>
+                  <span className="text-4xl font-extrabold text-gray-300 hover:text-gray-400 transition-colors duration-300 cursor-default">Microsoft</span>
+                  <span className="text-4xl font-extrabold text-gray-300 hover:text-gray-400 transition-colors duration-300 cursor-default">Amazon</span>
+                  <span className="text-4xl font-extrabold text-gray-300 hover:text-gray-400 transition-colors duration-300 cursor-default">Apple</span>
+                  <span className="text-4xl font-extrabold text-gray-300 hover:text-gray-400 transition-colors duration-300 cursor-default">Meta</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+      </main>
+
+      {/* --- Footer --- */}
+      <footer className="border-t border-gray-100 py-12 px-4 bg-gray-50">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+          variants={containerVariants}
+          className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8"
         >
-          <div className="mb-6">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent mx-auto mb-6"></div>
-          </div>
-
-          <p className="text-slate-400 text-lg">
-            &copy; {new Date().getFullYear()}{" "}
-            <motion.span
-              className="font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
-              whileHover={{ scale: 1.05 }}
-            >
+          {/* Logo/Brand Column */}
+          <div className="col-span-2 md:col-span-1">
+            <motion.div variants={itemVariants} className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 mb-4">
+              <FaConnectdevelop className="text-2xl text-gray-700" />
               CareerMentor.AI
-            </motion.span>{" "}
-            — Empowering careers with{" "}
-            <motion.span
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="text-yellow-400"
-            >
-              ✨
-            </motion.span>{" "}
-            artificial intelligence
-          </p>
-
-          <div className="mt-4 text-sm text-slate-500">
-            Built with React, Tailwind CSS & Framer Motion
+            </motion.div>
+            <motion.p variants={itemVariants} className="text-sm text-gray-500">
+              Empowering careers with data and intelligence.
+            </motion.p>
           </div>
+
+          {/* Navigation Links */}
+          <div className="md:col-span-1">
+            <motion.h4 variants={itemVariants} className="font-semibold text-gray-900 mb-4">Product</motion.h4>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <motion.li variants={itemVariants}><Link to="/features" className="hover:text-gray-900 transition duration-200">Features</Link></motion.li>
+              <motion.li variants={itemVariants}><Link to="/pricing" className="hover:text-gray-900 transition duration-200">Pricing</Link></motion.li>
+              <motion.li variants={itemVariants}><Link to="/how-it-works" className="hover:text-gray-900 transition duration-200">How It Works</Link></motion.li>
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div className="md:col-span-1">
+            <motion.h4 variants={itemVariants} className="font-semibold text-gray-900 mb-4">Company</motion.h4>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <motion.li variants={itemVariants}><Link to="/about" className="hover:text-gray-900 transition duration-200">About</Link></motion.li>
+              <motion.li variants={itemVariants}><Link to="/careers" className="hover:text-gray-900 transition duration-200">Careers</Link></motion.li>
+              <motion.li variants={itemVariants}><Link to="/contact" className="hover:text-gray-900 transition duration-200">Contact</Link></motion.li>
+            </ul>
+          </div>
+
+          {/* Resources Links */}
+          <div className="md:col-span-1">
+            <motion.h4 variants={itemVariants} className="font-semibold text-gray-900 mb-4">Resources</motion.h4>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <motion.li variants={itemVariants}><Link to="/blog" className="hover:text-gray-900 transition duration-200">Blog</Link></motion.li>
+              <motion.li variants={itemVariants}><Link to="/help" className="hover:text-gray-900 transition duration-200">Help Center</Link></motion.li>
+              <motion.li variants={itemVariants}><Link to="/terms" className="hover:text-gray-900 transition duration-200">Terms & Privacy</Link></motion.li>
+            </ul>
+          </div>
+          
+          {/* Social Icons (Placeholder for real icons) */}
+          <div className="md:col-span-1">
+            <motion.h4 variants={itemVariants} className="font-semibold text-gray-900 mb-4">Connect</motion.h4>
+            <motion.div variants={itemVariants} className="flex gap-4 text-gray-500 text-xl">
+              <FaRobot className="hover:text-gray-700 transition duration-200 cursor-pointer" />
+              <FaFileAlt className="hover:text-gray-700 transition duration-200 cursor-pointer" />
+              <FaRoad className="hover:text-gray-700 transition duration-200 cursor-pointer" />
+            </motion.div>
+          </div>
+
         </motion.div>
+
+        {/* Copyright */}
+        <div className="mt-12 pt-8 border-t border-gray-200 text-center">
+          <p className="text-sm text-gray-500">
+            &copy; {new Date().getFullYear()} CareerMentor.AI. All rights reserved.
+          </p>
+        </div>
       </footer>
     </div>
   );
