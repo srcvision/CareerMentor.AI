@@ -42,12 +42,12 @@ const Register = () => {
     setIsLoading(true);
     
     try {
-      const res = await axios.post(`${process.env.API_URL}api/auth/register`, { 
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/auth/register`, { 
         name, 
         email, 
         password 
       });
-      console.log(res.data);
+      console.log(res.data);  
       navigate("/dashboard");
     } catch (error) {
       console.error("Registration failed:", error);

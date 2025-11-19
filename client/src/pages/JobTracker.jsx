@@ -30,7 +30,7 @@ export default function JobTracker() {
   const loc = useLocation();
   const navigate = useNavigate();
 
-  const API_URL = `${process.env.API_URL}api/jobs`;
+  const API_URL = `${import.meta.env.VITE_BACKEND_URL}api/jobs`;
 
   useEffect(() => {
     if (!loc.state?.fromDashboard) {

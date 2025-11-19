@@ -29,7 +29,7 @@ export default function CareerRoadmap() {
     setRoadmap("");
     try {
       const res = await axios.post(
-        `${process.env.API_URL}api/roadmap/generate`,
+        `${import.meta.env.VITE_BACKEND_URL}api/roadmap/generate`,
         { goal },
         {
           headers: {

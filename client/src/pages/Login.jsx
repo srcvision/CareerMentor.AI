@@ -18,7 +18,7 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      const res = await axios.post(`${process.env.API_URL}api/auth/login`, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/auth/login`, {
         email,
         password
       });
@@ -239,7 +239,7 @@ const Login = () => {
             <p className="text-gray-400">
               New to CareerMentor.AI?{" "}
               <Link
-                to="/signup"
+                to="/register"
                 className="text-purple-300 font-semibold hover:text-purple-200 hover:underline transition-colors duration-300"
               >
                 Create your account

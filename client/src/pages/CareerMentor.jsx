@@ -30,7 +30,7 @@ export default function CareerMentor() {
     setAnswer("");
     try {
       const res = await axios.post(
-        `${process.env.API_URL}api/mentor/ask`,
+        `${import.meta.env.VITE_BACKEND_URL}api/mentor/ask`,
         { question },
         { headers: { Authorization: `Bearer ${user?.token}` } }
       );
